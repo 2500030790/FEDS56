@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Portfolio</title>
+</head>
+<body bgcolor="lightcyan">
+    <center>
+        <h1>🎓 Student Portfolio</h1>
+        <hr width="80%">
+    </center>
+    <h2>About Me</h2>
+    <p>
+        Hello! My name is John Pork. I am a B.Tech student who loves
+        programming, web development, and learning new technologies.
+    </p>
+    <h2>Student Information</h2>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr bgcolor="yellow">
+            <th>Field</th>
+            <th>Details</th>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>John Pork</td>
+        </tr>
+        <tr>
+            <td>Age</td>
+            <td>20</td>
+        </tr>
+        <tr>
+            <td>College</td>
+            <td>KL University</td>
+        </tr>
+        <tr>
+            <td>Course</td>
+            <td>B.Tech CSE</td>
+        </tr>
+        <tr>
+            <td>CGPA</td>
+            <td>9.5</td>
+        </tr>
+    </table>
+    <h2>Skills</h2>
+    <ul>
+        <li>C Programming</li>
+        <li>Java</li>
+        <li>Python</li>
+        <li>HTML</li>
+        <li>CSS</li>
+    </ul>
+    <h2>Hobbies</h2>
+    <ol>
+        <li>Coding</li>
+        <li>Gaming</li>
+        <li>Music</li>
+        <li>Cricket</li>
+    </ol>
+    <h2>Contact</h2>
+    <p>Email : john@gmail.com</p>
+    <p>Phone : +91 9876543210</p>
+    <hr>
+    <center>
+        <h3>Thank You!</h3>
+    </center>
+</body>
+</html>
