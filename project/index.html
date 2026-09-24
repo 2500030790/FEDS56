@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PawConnect | Pet Adoption Platform</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="logo">
+        <span class="logo-icon">🐾</span>
+        <span>Paw<span>Connect</span></span>
+    </div>
+
+    <nav id="navMenu">
+        <a href="#home">Home</a>
+        <a href="#pets">Find a Pet</a>
+        <a href="#regions">Regions</a>
+        <a href="#how">How It Works</a>
+        <a href="#about">About</a>
+    </nav>
+
+    <div class="nav-actions">
+        <button class="login-btn" onclick="openLogin()">Login</button>
+        <button class="adopt-btn" onclick="scrollToPets()">Adopt a Pet</button>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero" id="home">
+
+    <div class="hero-content reveal">
+
+        <div class="hero-badge">
+            🐾 Find your perfect companion
+        </div>
+
+        <h1>
+            Give a Pet a
+            <span>Forever Home.</span>
+        </h1>
+
+        <p>
+            Discover loving pets waiting for a family.
+            Browse verified adoption listings and find
+            your perfect companion today.
+        </p>
+
+        <div class="hero-buttons">
+            <button class="primary-btn" onclick="scrollToPets()">
+                Find a Pet →
+            </button>
+
+            <button class="secondary-btn" onclick="openListPet()">
+                List a Pet
+            </button>
+        </div>
+
+        <div class="hero-stats">
+
+            <div>
+                <strong>1,250+</strong>
+                <span>Pets Listed</span>
+            </div>
+
+            <div>
+                <strong>850+</strong>
+                <span>Happy Adoptions</span>
+            </div>
+
+            <div>
+                <strong>120+</strong>
+                <span>Verified Shelters</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="hero-image reveal">
+
+        <div class="image-card">
+            <img
+                src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=900&q=80"
+                alt="Golden Retriever">
+        </div>
+
+        <div class="floating-card">
+            <div class="heart">♥</div>
+            <div>
+                <strong>Max found a home!</strong>
+                <small>2 minutes ago</small>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= SEARCH ================= -->
+
+<section class="search-section">
+
+    <div class="search-box">
+
+        <div class="search-field">
+            <label>I'm looking for</label>
+
+            <select id="typeFilter" onchange="filterPets()">
+                <option value="all">Any Pet</option>
+                <option value="dog">Dogs</option>
+                <option value="cat">Cats</option>
+                <option value="rabbit">Rabbits</option>
+                <option value="bird">Birds</option>
+                <option value="hamster">Small pets</option>
+            </select>
+        </div>
+
+        <div class="search-field">
+            <label>Breed</label>
+
+            <select id="breedFilter" onchange="filterPets()">
+                <option value="all">Any Breed</option>
+                <option value="Golden Retriever">Golden Retriever</option>
+                <option value="Labrador">Labrador</option>
+                <option value="Beagle">Beagle</option>
+                <option value="Persian">Persian</option>
+                <option value="Indie Cat">Indie Cat</option>
+                <option value="Cocker Spaniel">Cocker Spaniel</option>
+                <option value="Shih Tzu">Shih Tzu</option>
+                <option value="Maine Coon">Maine Coon</option>
+                <option value="Holland Lop">Holland Lop</option>
+                <option value="Cockatiel">Cockatiel</option>
+                <option value="Syrian Hamster">Syrian Hamster</option>
+            </select>
+        </div>
+
+        <div class="search-field">
+            <label>Location</label>
+
+            <select id="locationFilter" onchange="filterPets()">
+                <option value="all">All Locations</option>
+                <option>Hyderabad</option>
+                <option>Chennai</option>
+                <option>Bangalore</option>
+                <option>Vijayawada</option>
+            </select>
+        </div>
+
+        <button class="search-btn" onclick="filterPets()">
+            🔍 Search
+        </button>
+
+    </div>
+
+</section>
+
+<!-- ================= REGIONS ================= -->
+
+<section class="regions-section" id="regions">
+    <div class="section-heading reveal">
+        <div>
+            <span class="section-label">EXPLORE BY REGION</span>
+            <h2>Find your match <span>nearby.</span></h2>
+            <p>Discover trusted shelters and adoptable companions across India.</p>
+        </div>
+        <div class="region-count"><strong id="regionCount">24</strong><span>active shelters</span></div>
+    </div>
+
+    <div class="region-layout">
+        <div class="region-list" id="regionList">
+            <button class="region-chip active" data-region="all" onclick="selectRegion('all', this)"><span>✦</span> All regions <strong>24</strong></button>
+            <button class="region-chip" data-region="Hyderabad" onclick="selectRegion('Hyderabad', this)"><span>◉</span> Hyderabad <strong>8</strong></button>
+            <button class="region-chip" data-region="Bangalore" onclick="selectRegion('Bangalore', this)"><span>◉</span> Bangalore <strong>7</strong></button>
+            <button class="region-chip" data-region="Chennai" onclick="selectRegion('Chennai', this)"><span>◉</span> Chennai <strong>5</strong></button>
+            <button class="region-chip" data-region="Vijayawada" onclick="selectRegion('Vijayawada', this)"><span>◉</span> Vijayawada <strong>4</strong></button>
+        </div>
+        <div class="map-shell">
+            <div id="adoptionMap" aria-label="Map of PawConnect adoption regions"></div>
+            <div class="map-legend"><span class="legend-dot"></span> Verified shelter network <span class="legend-line"></span> Active adoption route</div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= PETS ================= -->
+
+<section class="pets-section" id="pets">
+
+    <div class="section-heading reveal">
+
+        <div>
+            <span class="section-label">MEET YOUR MATCH</span>
+
+            <h2>Pets waiting for <span>you.</span></h2>
+
+            <p>
+                Every pet deserves a loving family.
+                Maybe you're the one they've been waiting for.
+            </p>
+        </div>
+
+        <button class="view-all" onclick="resetFilters()">
+            View All Pets →
+        </button>
+
+    </div>
+
+
+    <div class="pet-grid" id="petGrid">
+
+        <!-- PET 1 -->
+
+        <article class="pet-card reveal"
+            data-type="dog"
+            data-breed="Golden Retriever">
+
+            <div class="pet-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=700&q=80"
+                    alt="Max">
+
+                <button class="favorite"
+                    onclick="toggleFavorite(this)">
+                    ♡
+                </button>
+
+                <span class="status">Available</span>
+
+            </div>
+
+            <div class="pet-info">
+
+                <div class="pet-title">
+                    <h3>Max</h3>
+                    <span>♂</span>
+                </div>
+
+                <p>Golden Retriever • 2 Years</p>
+
+                <div class="health">
+                    ✓ Vaccinated &nbsp; ✓ Healthy
+                </div>
+
+                <div class="pet-bottom">
+
+                    <span>📍 Hyderabad</span>
+
+                    <button onclick="openAdoption('Max')">
+                        Adopt
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+        <article class="pet-card reveal" data-type="rabbit" data-breed="Holland Lop">
+            <div class="pet-image"><img src="https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=700&q=80" alt="Biscuit"><button class="favorite" onclick="toggleFavorite(this)">♡</button><span class="status">Available</span></div>
+            <div class="pet-info"><div class="pet-title"><h3>Biscuit</h3><span>♂</span></div><p>Holland Lop • 1 Year</p><div class="health">✓ Vet checked &nbsp; ✓ Gentle</div><div class="pet-bottom"><span>📍 Chennai</span><button onclick="openAdoption('Biscuit')">Adopt</button></div></div>
+        </article>
+
+        <article class="pet-card reveal" data-type="dog" data-breed="Cocker Spaniel">
+            <div class="pet-image"><img src="https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=700&q=80" alt="Daisy"><button class="favorite" onclick="toggleFavorite(this)">♡</button><span class="status">New match</span></div>
+            <div class="pet-info"><div class="pet-title"><h3>Daisy</h3><span>♀</span></div><p>Cocker Spaniel • 10 Months</p><div class="health">✓ Vaccinated &nbsp; ✓ Playful</div><div class="pet-bottom"><span>📍 Hyderabad</span><button onclick="openAdoption('Daisy')">Adopt</button></div></div>
+        </article>
+
+        <article class="pet-card reveal" data-type="cat" data-breed="Maine Coon">
+            <div class="pet-image"><img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=700&q=80" alt="Pepper"><button class="favorite" onclick="toggleFavorite(this)">♡</button><span class="status">Available</span></div>
+            <div class="pet-info"><div class="pet-title"><h3>Pepper</h3><span>♀</span></div><p>Maine Coon • 3 Years</p><div class="health">✓ Vaccinated &nbsp; ✓ Calm</div><div class="pet-bottom"><span>📍 Bangalore</span><button onclick="openAdoption('Pepper')">Adopt</button></div></div>
+        </article>
+
+        <article class="pet-card reveal" data-type="bird" data-breed="Cockatiel">
+            <div class="pet-image"><img src="https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=700&q=80" alt="Sunny"><button class="favorite" onclick="toggleFavorite(this)">♡</button><span class="status">Available</span></div>
+            <div class="pet-info"><div class="pet-title"><h3>Sunny</h3><span>♂</span></div><p>Cockatiel • 2 Years</p><div class="health">✓ Healthy &nbsp; ✓ Singing</div><div class="pet-bottom"><span>📍 Vijayawada</span><button onclick="openAdoption('Sunny')">Adopt</button></div></div>
+        </article>
+
+        <article class="pet-card reveal" data-type="hamster" data-breed="Syrian Hamster">
+            <div class="pet-image"><img src="https://images.unsplash.com/photo-1425082661705-1834bfd09dca?auto=format&fit=crop&w=700&q=80" alt="Nibbles"><button class="favorite" onclick="toggleFavorite(this)">♡</button><span class="status">Available</span></div>
+            <div class="pet-info"><div class="pet-title"><h3>Nibbles</h3><span>♂</span></div><p>Syrian Hamster • 8 Months</p><div class="health">✓ Vet checked &nbsp; ✓ Curious</div><div class="pet-bottom"><span>📍 Hyderabad</span><button onclick="openAdoption('Nibbles')">Adopt</button></div></div>
+        </article>
+
+        <article class="pet-card reveal" data-type="dog" data-breed="Shih Tzu">
+            <div class="pet-image"><img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=700&q=80" alt="Tofu"><button class="favorite" onclick="toggleFavorite(this)">♡</button><span class="status">Available</span></div>
+            <div class="pet-info"><div class="pet-title"><h3>Tofu</h3><span>♂</span></div><p>Shih Tzu • 4 Years</p><div class="health">✓ Vaccinated &nbsp; ✓ Cuddly</div><div class="pet-bottom"><span>📍 Chennai</span><button onclick="openAdoption('Tofu')">Adopt</button></div></div>
+        </article>
+
+
+        <!-- PET 2 -->
+
+        <article class="pet-card reveal"
+            data-type="cat"
+            data-breed="Persian">
+
+            <div class="pet-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=700&q=80"
+                    alt="Luna">
+
+                <button class="favorite"
+                    onclick="toggleFavorite(this)">
+                    ♡
+                </button>
+
+                <span class="status">Available</span>
+
+            </div>
+
+            <div class="pet-info">
+
+                <div class="pet-title">
+                    <h3>Luna</h3>
+                    <span>♀</span>
+                </div>
+
+                <p>Persian • 1 Year</p>
+
+                <div class="health">
+                    ✓ Vaccinated &nbsp; ✓ Healthy
+                </div>
+
+                <div class="pet-bottom">
+
+                    <span>📍 Bangalore</span>
+
+                    <button onclick="openAdoption('Luna')">
+                        Adopt
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- PET 3 -->
+
+        <article class="pet-card"
+            data-type="dog"
+            data-breed="Labrador">
+
+            <div class="pet-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=700&q=80"
+                    alt="Bruno">
+
+                <button class="favorite"
+                    onclick="toggleFavorite(this)">
+                    ♡
+                </button>
+
+                <span class="status">Available</span>
+
+            </div>
+
+            <div class="pet-info">
+
+                <div class="pet-title">
+                    <h3>Bruno</h3>
+                    <span>♂</span>
+                </div>
+
+                <p>Labrador • 3 Years</p>
+
+                <div class="health">
+                    ✓ Vaccinated &nbsp; ✓ Healthy
+                </div>
+
+                <div class="pet-bottom">
+
+                    <span>📍 Chennai</span>
+
+                    <button onclick="openAdoption('Bruno')">
+                        Adopt
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- PET 4 -->
+
+        <article class="pet-card reveal"
+            data-type="dog"
+            data-breed="Beagle">
+
+            <div class="pet-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1505628346881-b72b27e84530?auto=format&fit=crop&w=700&q=80"
+                    alt="Coco">
+
+                <button class="favorite"
+                    onclick="toggleFavorite(this)">
+                    ♡
+                </button>
+
+                <span class="status">Available</span>
+
+            </div>
+
+            <div class="pet-info">
+
+                <div class="pet-title">
+                    <h3>Coco</h3>
+                    <span>♀</span>
+                </div>
+
+                <p>Beagle • 8 Months</p>
+
+                <div class="health">
+                    ✓ Vaccinated &nbsp; ✓ Healthy
+                </div>
+
+                <div class="pet-bottom">
+
+                    <span>📍 Vijayawada</span>
+
+                    <button onclick="openAdoption('Coco')">
+                        Adopt
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- PET 5 -->
+
+        <article class="pet-card reveal"
+            data-type="cat"
+            data-breed="Indie Cat">
+
+            <div class="pet-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=700&q=80"
+                    alt="Milo">
+
+                <button class="favorite"
+                    onclick="toggleFavorite(this)">
+                    ♡
+                </button>
+
+                <span class="status">Available</span>
+
+            </div>
+
+            <div class="pet-info">
+
+                <div class="pet-title">
+                    <h3>Milo</h3>
+                    <span>♂</span>
+                </div>
+
+                <p>Indie Cat • 2 Years</p>
+
+                <div class="health">
+                    ✓ Vaccinated &nbsp; ✓ Healthy
+                </div>
+
+                <div class="pet-bottom">
+
+                    <span>📍 Hyderabad</span>
+
+                    <button onclick="openAdoption('Milo')">
+                        Adopt
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- PET 6 -->
+
+        <article class="pet-card"
+            data-type="dog"
+            data-breed="Labrador">
+
+            <div class="pet-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=700&q=80"
+                    alt="Rocky">
+
+                <button class="favorite"
+                    onclick="toggleFavorite(this)">
+                    ♡
+                </button>
+
+                <span class="status">Available</span>
+
+            </div>
+
+            <div class="pet-info">
+
+                <div class="pet-title">
+                    <h3>Rocky</h3>
+                    <span>♂</span>
+                </div>
+
+                <p>Labrador • 1.5 Years</p>
+
+                <div class="health">
+                    ✓ Vaccinated &nbsp; ✓ Healthy
+                </div>
+
+                <div class="pet-bottom">
+
+                    <span>📍 Bangalore</span>
+
+                    <button onclick="openAdoption('Rocky')">
+                        Adopt
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- ================= HOW IT WORKS ================= -->
+
+<section class="how-section" id="how">
+
+    <div class="center-heading">
+
+        <span class="section-label">SIMPLE & TRANSPARENT</span>
+
+        <h2>How adoption <span>works.</span></h2>
+
+        <p>
+            We've made the process simple so you can focus
+            on what matters — finding your new best friend.
+        </p>
+
+    </div>
+
+
+    <div class="steps">
+
+        <div class="step">
+
+            <div class="step-number">01</div>
+
+            <div class="step-icon">🔎</div>
+
+            <h3>Find Your Pet</h3>
+
+            <p>
+                Browse verified pets using filters
+                for breed, age and location.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">02</div>
+
+            <div class="step-icon">📋</div>
+
+            <h3>Apply for Adoption</h3>
+
+            <p>
+                Submit a simple adoption application
+                with your details.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">03</div>
+
+            <div class="step-icon">💬</div>
+
+            <h3>Connect & Meet</h3>
+
+            <p>
+                Communicate with the shelter and
+                arrange a meeting.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">04</div>
+
+            <div class="step-icon">🏠</div>
+
+            <h3>Bring Them Home</h3>
+
+            <p>
+                Complete the adoption process and
+                welcome your new companion.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FEATURES ================= -->
+
+<section class="features-section" id="about">
+
+    <div class="center-heading">
+
+        <span class="section-label">WHY PAWCONNECT?</span>
+
+        <h2>Adoption made <span>better.</span></h2>
+
+    </div>
+
+
+    <div class="features-grid">
+
+        <div class="feature">
+            <div>🩺</div>
+            <h3>Health Records</h3>
+            <p>
+                Access vaccination and health information
+                before making an adoption decision.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div>✓</div>
+            <h3>Verified Listings</h3>
+            <p>
+                Verified shelters and owners help create
+                a safer adoption environment.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div>💬</div>
+            <h3>Real-Time Chat</h3>
+            <p>
+                Communicate directly with shelters and
+                owners during the adoption process.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div>⭐</div>
+            <h3>Smart Matching</h3>
+            <p>
+                Get pet recommendations based on your
+                preferences and lifestyle.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+
+            <div class="logo">
+                <span class="logo-icon">🐾</span>
+                <span>Paw<span>Connect</span></span>
+            </div>
+
+            <p>
+                Connecting loving families with pets
+                waiting for a forever home.
+            </p>
+
+        </div>
+
+        <div>
+            <h4>Platform</h4>
+            <a href="#pets">Find a Pet</a>
+            <a href="#how">How It Works</a>
+            <a href="#listPetModal" onclick="openListPet(); return false;">List a Pet</a>
+        </div>
+
+        <div>
+            <h4>Support</h4>
+            <a href="#">Contact Us</a>
+            <a href="#">FAQs</a>
+            <a href="#">Privacy Policy</a>
+        </div>
+
+    </div>
+
+    <div class="copyright">
+        © 2026 PawConnect. Built for better pet adoption. 🐾
+    </div>
+
+</footer>
+
+
+<!-- ================= LOGIN MODAL ================= -->
+
+<div class="modal" id="loginModal">
+
+    <div class="modal-box">
+
+        <button class="close" onclick="closeModal('loginModal')">
+            ×
+        </button>
+
+        <div class="modal-icon">🐾</div>
+
+        <h2>Welcome Back!</h2>
+
+        <p>Login to your PawConnect account.</p>
+
+        <form onsubmit="login(event)">
+
+            <input
+                type="email"
+                placeholder="Email address"
+                required>
+
+            <input
+                type="password"
+                placeholder="Password"
+                required>
+
+            <button class="primary-btn full">
+                Login
+            </button>
+
+        </form>
+
+        <p class="switch">
+            Don't have an account?
+            <button onclick="switchToRegister()">Register</button>
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ================= REGISTER MODAL ================= -->
+
+<div class="modal" id="registerModal">
+
+    <div class="modal-box">
+
+        <button class="close" onclick="closeModal('registerModal')">
+            ×
+        </button>
+
+        <div class="modal-icon">🐶</div>
+
+        <h2>Create Account</h2>
+
+        <p>Join our pet adoption community.</p>
+
+        <form onsubmit="register(event)">
+
+            <input
+                type="text"
+                placeholder="Full name"
+                required>
+
+            <input
+                type="email"
+                placeholder="Email address"
+                required>
+
+            <input
+                type="password"
+                placeholder="Create password"
+                required>
+
+            <select required>
+                <option value="">Select account type</option>
+                <option>Adopter</option>
+                <option>Shelter / Pet Owner</option>
+            </select>
+
+            <button class="primary-btn full">
+                Create Account
+            </button>
+
+        </form>
+
+        <p class="switch">
+            Already have an account?
+            <button onclick="switchToLogin()">Login</button>
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ================= ADOPTION MODAL ================= -->
+
+<div class="modal" id="listPetModal">
+    <div class="modal-box listing-modal-box">
+        <button class="close" onclick="closeModal('listPetModal')">×</button>
+        <div class="modal-icon">🐾</div>
+        <h2>List a Pet</h2>
+        <p>Share a few details and help your companion find the right family.</p>
+        <form onsubmit="submitPetListing(event)">
+            <div class="form-row">
+                <input name="petName" type="text" placeholder="Pet name" required>
+                <select name="petType" required>
+                    <option value="">Animal type</option>
+                    <option value="dog">Dog</option>
+                    <option value="cat">Cat</option>
+                    <option value="rabbit">Rabbit</option>
+                    <option value="bird">Bird</option>
+                    <option value="hamster">Hamster</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <input name="petBreed" type="text" placeholder="Breed" required>
+                <input name="petAge" type="text" placeholder="Age (e.g. 2 years)" required>
+            </div>
+            <div class="form-row">
+                <select name="petLocation" required>
+                    <option value="">Location</option>
+                    <option>Hyderabad</option>
+                    <option>Chennai</option>
+                    <option>Bangalore</option>
+                    <option>Vijayawada</option>
+                </select>
+                <select name="petGender" required>
+                    <option value="">Gender</option>
+                    <option value="♂">Male</option>
+                    <option value="♀">Female</option>
+                </select>
+            </div>
+            <input name="petImage" type="url" placeholder="Photo URL (optional)">
+            <textarea name="petStory" placeholder="Tell adopters about their personality and needs" required></textarea>
+            <button class="primary-btn full">Publish Pet Listing <span>→</span></button>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="adoptionModal">
+
+    <div class="modal-box">
+
+        <button class="close"
+            onclick="closeModal('adoptionModal')">
+            ×
+        </button>
+
+        <div class="modal-icon">❤️</div>
+
+        <h2>Adopt <span id="selectedPet"></span></h2>
+
+        <p>
+            Tell us a little about yourself and
+            your home environment.
+        </p>
+
+        <form onsubmit="submitApplication(event)">
+
+            <input
+                type="text"
+                placeholder="Your full name"
+                required>
+
+            <input
+                type="tel"
+                placeholder="Phone number"
+                required>
+
+            <input
+                type="text"
+                placeholder="City"
+                required>
+
+            <select required>
+                <option value="">Do you have previous pet experience?</option>
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+
+            <textarea
+                placeholder="Why would you like to adopt this pet?"
+                required></textarea>
+
+            <button class="primary-btn full">
+                Submit Application
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<div class="floating-pets" aria-hidden="true">
+    <span class="sky-pet sky-pet-one">🐕</span>
+    <span class="sky-pet sky-pet-two">🐈</span>
+    <span class="sky-pet sky-pet-three">🐇</span>
+    <span class="sky-pet sky-pet-four">🦜</span>
+</div>
+
+<button class="chat-launcher" id="chatLauncher" onclick="toggleChat()" aria-label="Open PawPal assistant">
+    <span class="chat-pulse"></span><span>🐾</span><small>Ask PawPal</small>
+</button>
+
+<aside class="chat-panel" id="chatPanel" aria-label="PawPal adoption assistant">
+    <div class="chat-header"><div><strong>PawPal</strong><span>Your adoption sidekick</span></div><button onclick="toggleChat()">×</button></div>
+    <div class="chat-messages" id="chatMessages"><div class="chat-message bot">Hi! I can help you find a pet, understand adoption steps, or prepare your home. What are you curious about?</div></div>
+    <div class="chat-suggestions"><button onclick="askPawPal('Which pet is best for an apartment?')">Apartment pets</button><button onclick="askPawPal('How does adoption work?')">How it works</button></div>
+    <form class="chat-form" onsubmit="sendChat(event)"><input id="chatInput" type="text" placeholder="Ask PawPal anything..." autocomplete="off"><button aria-label="Send message">↑</button></form>
+</aside>
+
+<div class="welcome-gate" id="welcomeGate">
+    <div class="gate-orbit orbit-one"></div>
+    <div class="gate-orbit orbit-two"></div>
+    <div class="gate-content">
+        <div class="gate-mark">🐾</div>
+        <span class="section-label">THE KINDER WAY HOME</span>
+        <h2>Every story starts<br><span>with a hello.</span></h2>
+        <p>Sign in to explore verified pets, save your favourites, and connect with shelters in your region.</p>
+        <button class="primary-btn gate-button" onclick="openLogin()">Enter PawConnect <span>→</span></button>
+        <button class="gate-register" onclick="openRegister()">New here? Create an account</button>
+        <small>Private, human-led adoption matching</small>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="script.jss.js"></script>
+
+</body>
+</html>
